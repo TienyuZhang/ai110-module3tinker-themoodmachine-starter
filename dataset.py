@@ -50,6 +50,14 @@ SAMPLE_POSTS = [
     "This is fine",
     "So excited for the weekend",
     "I am not happy about this",
+    "lowkey nervous about the exam but we move 🥲",
+    "wow another monday, can't wait 🙄",
+    "no cap this playlist is fire 🔥🔥",
+    "idk how i feel rn... kinda numb",
+    "passed my driving test FINALLY lets gooo 😭🎉",
+    "they cancelled the trip lol cool cool cool",
+    "just chilling at home, nothing much going on",
+    "i hate that i love this song so much 💀",
 ]
 
 # Human labels for each post above.
@@ -65,6 +73,14 @@ TRUE_LABELS = [
     "neutral",   # "This is fine"
     "positive",  # "So excited for the weekend"
     "negative",  # "I am not happy about this"
+    "mixed",     # "lowkey nervous about the exam but we move 🥲" (anxiety + resilience)
+    "negative",  # "wow another monday, can't wait 🙄" (sarcasm — really dreading it)
+    "positive",  # "no cap this playlist is fire 🔥🔥" (slang praise)
+    "neutral",   # "idk how i feel rn... kinda numb" (flat / undecided — edge case)
+    "positive",  # "passed my driving test FINALLY lets gooo 😭🎉" (happy-crying emoji)
+    "negative",  # "they cancelled the trip lol cool cool cool" (sarcasm masking disappointment)
+    "neutral",   # "just chilling at home, nothing much going on"
+    "mixed",     # "i hate that i love this song so much 💀" (love + mock-frustration — edge case)
 ]
 
 # TODO: Add 5-10 more posts and labels.
