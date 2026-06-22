@@ -13,10 +13,16 @@ import re
 
 from typing import List, Dict, Tuple, Optional
 
-from dataset import POSITIVE_WORDS, NEGATIVE_WORDS
+from dataset import (
+    POSITIVE_WORDS,
+    NEGATIVE_WORDS,
+    POSITIVE_EMOJIS,
+    NEGATIVE_EMOJIS,
+)
 
 # Common "ASCII" emoticons we want to keep as their own tokens.
-ASCII_EMOJIS = [":)", ":-)", "(:", ":(", ":-(", "):", ":D", ":P", ":/", ";)", "<3"]
+# Kept lowercase because preprocess() lowercases text before matching (":D" -> ":d").
+ASCII_EMOJIS = [":)", ":-)", "(:", ":(", ":-(", "):", ":d", ":p", ":/", ";)", "<3"]
 
 # Words that flip the sentiment of the word that follows them.
 NEGATION_WORDS = {"not", "no", "never", "none", "cant", "can't", "dont", "don't", "isnt", "isn't"}
@@ -47,9 +53,10 @@ class MoodAnalyzer:
         positive_words = positive_words if positive_words is not None else POSITIVE_WORDS
         negative_words = negative_words if negative_words is not None else NEGATIVE_WORDS
 
-        # Store as sets for faster lookup.
-        self.positive_words = set(w.lower() for w in positive_words)
-        self.negative_words = set(w.lower() for w in negative_words)
+        # Store as sets for faster lookup. Emojis/emoticons are folded in so
+        # the scorer treats them as sentiment signals alongside plain words.
+        self.positive_words = set(w.lower() for w in positive_words) | set(POSITIVE_EMOJIS)
+        self.negative_words = set(w.lower() for w in negative_words) | set(NEGATIVE_EMOJIS)
 
     # ---------------------------------------------------------------------
     # Preprocessing
@@ -179,8 +186,11 @@ class MoodAnalyzer:
 
         score = pos_hits - neg_hits
 
-        # Both sides fired -> conflicting feelings, regardless of the net score.
-        if pos_hits > 0 and neg_hits > 0:
+        # "Mixed" only when both sides fired AND they balance out (no clear
+        # winner). If one side outweighs the other, trust the net score so a
+        # sarcastic "I love getting stuck in traffic" (love +1, stuck -1,
+        # traffic -1 = -1) reads as negative rather than mixed.
+        if pos_hits > 0 and neg_hits > 0 and score == 0:
             return "mixed"
         if score > 0:
             return "positive"

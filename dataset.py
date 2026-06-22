@@ -36,6 +36,36 @@ NEGATIVE_WORDS = [
     "stressed",
     "hate",
     "boring",
+    # Common "complaint" words. These often appear in sarcastic posts where a
+    # single positive keyword (e.g. "love") would otherwise dominate, such as
+    # "I love getting stuck in traffic". Having them here lets the negative
+    # context push back instead of the post reading as purely positive.
+    "stuck",
+    "traffic",
+    "cancelled",
+    "delayed",
+    "waiting",
+    "annoyed",
+    "nervous",
+    "numb",
+]
+
+# ---------------------------------------------------------------------
+# Emoji / emoticon sentiment
+# ---------------------------------------------------------------------
+# preprocess() in mood_analyzer.py splits these out as their own tokens, so
+# listing them here lets the scorer treat them as real sentiment signals.
+# Note: some emojis are genuinely ambiguous (😭 can be joy or grief, 💀 is
+# usually "dying laughing"), so they are intentionally left unscored.
+
+POSITIVE_EMOJIS = [
+    "🙂", "😊", "😀", "😁", "😄", "😍", "🥰", "❤️", "👍", "🎉", "🔥", "😂", "✨",
+    ":)", ":-)", "(:", ":d", "<3",
+]
+
+NEGATIVE_EMOJIS = [
+    "🙄", "😡", "😠", "😢", "😞", "😔", "👎", "😩", "😫",
+    ":(", ":-(", "):", ":/",
 ]
 
 # ---------------------------------------------------------------------
